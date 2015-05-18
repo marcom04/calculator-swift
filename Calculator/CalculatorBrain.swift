@@ -34,6 +34,28 @@ class CalculatorBrain
                 }
             }
         }
+        
+        var precedence: Int {
+            get {
+                switch self {
+                case .Operand(_):
+                    return Int.max
+                case .Constant(_, _):
+                    return Int.max
+                case .Variable(_):
+                    return Int.max
+                case .UnaryOperation(_, _):
+                    return Int.max
+                case .BinaryOperation(let symbol, _):
+                    if symbol == "+" || symbol == "−" {
+                        return 0
+                    }
+                    else {
+                        return Int.max
+                    }
+                }
+            }
+        }
     }
     
     private var opStack = [Op]()
@@ -89,7 +111,10 @@ class CalculatorBrain
             case .BinaryOperation(let symbol, _):
                 let op1Description = description(remainingOps)
                 let op2Description = description(op1Description.remainingOps)
-                let dsc = "(" + op2Description.result + symbol + op1Description.result + ")"
+                var dsc = op2Description.result + symbol + op1Description.result
+                if op.precedence == 0 {
+                    dsc = "(" + dsc + ")"
+                }
                 return (dsc, op2Description.remainingOps)
             }
         }
