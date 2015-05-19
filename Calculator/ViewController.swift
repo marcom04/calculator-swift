@@ -79,6 +79,21 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func undo() {
+        if userIsInTheMiddleOfTypingANumber {
+            // backspace
+            if let val = display.text {
+                if count(val) > 0 {
+                    display.text = dropLast(val)
+                }
+            }
+        } else {
+            // undo last operation
+            
+        }
+        
+    }
+    
     @IBAction func setVariable() {
         userIsInTheMiddleOfTypingANumber = false
         if let variableValue = displayValue {
