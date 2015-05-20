@@ -29,7 +29,6 @@ class ViewController: UIViewController {
             } else {
                 display.text = " "
             }
-            userIsInTheMiddleOfTypingANumber = false
         }
     }
     
