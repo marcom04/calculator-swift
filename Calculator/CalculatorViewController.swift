@@ -8,13 +8,14 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class CalculatorViewController: UIViewController {
 
-    @IBOutlet weak var display: UILabel!    // Optional, the esclamation point is used when declaring variables used all over the application so that we can use directly the variable skipping the necessary unwrapping of the optional
-    
+    // Optional, the esclamation point is used when declaring variables used all over the application so that we can use directly the variable skipping the necessary unwrapping of the optional
+    @IBOutlet weak var display: UILabel!
     @IBOutlet weak var desc: UILabel!
     
-    var userIsInTheMiddleOfTypingANumber = false // all properties have to be initialized when the object is initialized
+    var brain = CalculatorBrain()
+    var userIsInTheMiddleOfTypingANumber = false    // all properties have to be initialized when the object is initialized
     
     var displayValue: Double? {
         get {
@@ -32,14 +33,40 @@ class ViewController: UIViewController {
         }
     }
     
-    var brain = CalculatorBrain()
-    
     @IBAction func clear() {
         brain.clearStack()
         brain.variableValues.removeValueForKey("M")
         displayValue = 0
         desc.text = " "
         userIsInTheMiddleOfTypingANumber = false
+    }
+    
+    @IBAction func undo() {
+        if userIsInTheMiddleOfTypingANumber {
+            // backspace
+            if let val = display.text {
+                if count(val) > 0 {
+                    display.text = dropLast(val)
+                }
+            }
+        } else {
+            // undo last operation
+        }
+    }
+    
+    @IBAction func setVariable() {
+        userIsInTheMiddleOfTypingANumber = false
+        if let variableValue = displayValue {
+            brain.variableValues["M"] = variableValue
+            displayValue = brain.evaluate()
+        }
+    }
+    
+    @IBAction func getVariable() {
+        if userIsInTheMiddleOfTypingANumber {
+            enter()
+        }
+        displayValue = brain.pushOperand("M")
     }
     
     @IBAction func appendDigit(sender: UIButton) {
@@ -76,36 +103,6 @@ class ViewController: UIViewController {
         } else {
             displayValue = nil
         }
-    }
-    
-    @IBAction func undo() {
-        if userIsInTheMiddleOfTypingANumber {
-            // backspace
-            if let val = display.text {
-                if count(val) > 0 {
-                    display.text = dropLast(val)
-                }
-            }
-        } else {
-            // undo last operation
-            
-        }
-        
-    }
-    
-    @IBAction func setVariable() {
-        userIsInTheMiddleOfTypingANumber = false
-        if let variableValue = displayValue {
-            brain.variableValues["M"] = variableValue
-            displayValue = brain.evaluate()
-        }
-    }
-    
-    @IBAction func getVariable() {
-        if userIsInTheMiddleOfTypingANumber {
-            enter()
-        }
-        displayValue = brain.pushOperand("M")
     }
 }
 
