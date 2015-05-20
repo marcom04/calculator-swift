@@ -104,5 +104,18 @@ class CalculatorViewController: UIViewController {
             displayValue = nil
         }
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let identifier = segue.identifier {
+            switch identifier {
+                case "Show Graph":
+                    if let cgc = segue.destinationViewController as? CalculatorGraphViewController {
+                        // TODO: do something
+                        println("wow")
+                    }
+                default: break
+            }
+        }
+    }
 }
 
