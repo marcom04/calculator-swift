@@ -10,5 +10,6 @@ import UIKit
 
 class CalculatorGraphViewController: UIViewController {
 
+    @IBOutlet weak var graphView: UIView!
 
 }

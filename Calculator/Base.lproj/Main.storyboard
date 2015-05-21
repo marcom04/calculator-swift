@@ -280,7 +280,7 @@
                                     <action selector="setVariable" destination="BYZ-38-t0r" eventType="touchUpInside" id="cKa-Ca-Uo3"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oWx-iG-amO">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="headTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oWx-iG-amO">
                                 <rect key="frame" x="136" y="72" width="328" height="41"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="338" id="qkQ-qd-Tjj"/>
@@ -456,8 +456,23 @@
                     <view key="view" contentMode="scaleToFill" id="agq-pw-RRP">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="Wal-7I-yv0" customClass="GraphView" customModule="Calculator" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Wal-7I-yv0" secondAttribute="trailing" id="28k-gJ-45s"/>
+                            <constraint firstItem="Wal-7I-yv0" firstAttribute="bottom" secondItem="lzB-ge-DOz" secondAttribute="top" id="9QW-qu-QuO"/>
+                            <constraint firstItem="Wal-7I-yv0" firstAttribute="top" secondItem="agq-pw-RRP" secondAttribute="top" id="CV9-Rl-zvH"/>
+                            <constraint firstItem="Wal-7I-yv0" firstAttribute="leading" secondItem="agq-pw-RRP" secondAttribute="leading" id="pw4-qt-y0e"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="graphView" destination="Wal-7I-yv0" id="aZw-e7-IN2"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Eu0-WU-uyx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
