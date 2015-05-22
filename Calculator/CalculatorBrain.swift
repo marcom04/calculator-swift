@@ -58,7 +58,8 @@ class CalculatorBrain
         }
     }
     
-    var program: AnyObject {        // guaranteed to be a PropertyList
+    typealias PropertyList = AnyObject
+    var program: PropertyList {        // guaranteed to be a PropertyList
         get {
             return opStack.map { $0.description }
         }
@@ -150,7 +151,7 @@ class CalculatorBrain
 //                println("description = \(result) with \(remainder) left over")
                 operations = remainder
             }
-            return ",".join(descriptions)+"="
+            return ",".join(descriptions) + "="
         }
     }
     
@@ -195,6 +196,4 @@ class CalculatorBrain
     func clearStack() {
         opStack.removeAll()
     }
-    
-    
 }
