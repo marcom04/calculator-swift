@@ -71,6 +71,8 @@ class CalculatorBrain
                         newOpStack.append(op)
                     } else if let operand = NSNumberFormatter().numberFromString(opSymbol)?.doubleValue {
                         newOpStack.append(.Operand(operand))
+                    } else {
+                        newOpStack.append(.Variable(opSymbol))
                     }
                 }
                 opStack = newOpStack
@@ -94,6 +96,10 @@ class CalculatorBrain
         learnOp(Op.UnaryOperation("sin", sin))
         learnOp(Op.UnaryOperation("cos", cos))
         learnOp(Op.Constant("π", M_PI))
+    }
+    
+    func showStack() -> String? {
+        return " ".join(opStack.map{ "\($0)" })
     }
     
     func pushOperand(operand: Double) -> Double? {

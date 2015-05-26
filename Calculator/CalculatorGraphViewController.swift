@@ -8,10 +8,20 @@
 
 import UIKit
 
-class CalculatorGraphViewController: UIViewController {
-
+class CalculatorGraphViewController: UIViewController, GraphViewDataSource {
+    
+    // Model
+    private var brain = CalculatorBrain()
+    typealias PropertyList = AnyObject
+    var program: PropertyList {
+        get { return brain.program }
+        set { brain.program = newValue }
+    }
+    
     @IBOutlet weak var graphView: GraphView! {
         didSet {
+            graphView.dataSource = self
+            
             graphView.addGestureRecognizer(UIPinchGestureRecognizer(target: graphView, action: "scale:"))
             graphView.addGestureRecognizer(UIPanGestureRecognizer(target: graphView, action: "move:"))
             let doubleTapRecognizer = UITapGestureRecognizer(target: graphView, action: "moveOrigin:")
@@ -20,4 +30,12 @@ class CalculatorGraphViewController: UIViewController {
         }
     }
 
+    func yForX(x: CGFloat) -> CGFloat? {
+        brain.variableValues["M"] = Double(x)
+        if let y = brain.evaluate() {
+            return CGFloat(y)
+        } else {
+            return nil
+        }
+    }
 }

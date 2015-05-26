@@ -106,14 +106,20 @@ class CalculatorViewController: UIViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let identifier = segue.identifier {
-            switch identifier {
-                case "Show Graph":
-                    if let cgc = segue.destinationViewController as? CalculatorGraphViewController {
-                        // TODO: do something
-                        println("wow")
-                    }
-                default: break
+        var destination = segue.destinationViewController as? UIViewController
+        if let navCon = destination as? UINavigationController {
+            destination = navCon.visibleViewController
+        }
+        if let cgvc = destination as? CalculatorGraphViewController {
+            if let identifier = segue.identifier {
+                switch identifier {
+                    case "Show Graph":
+                        // set the graph view controller's program with the current program
+                        cgvc.program = brain.program
+                        // set the graph title
+                        cgvc.title = brain.description.componentsSeparatedByString(",").last
+                    default: break
+                }
             }
         }
     }

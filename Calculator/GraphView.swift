@@ -8,11 +8,20 @@
 
 import UIKit
 
+protocol GraphViewDataSource: class {
+    func yForX(x: CGFloat) -> CGFloat?
+}
+
 @IBDesignable
 class GraphView: UIView
 {
     var origin: CGPoint! { didSet { setNeedsDisplay() } }
-    @IBInspectable var scale: CGFloat = 1 { didSet { setNeedsDisplay() } }
+    @IBInspectable var scale: CGFloat = 50 { didSet { setNeedsDisplay() } }
+    
+    var lineWidth: CGFloat = 1.0 { didSet { setNeedsDisplay() } }
+    var lineColor: UIColor = UIColor.blackColor() { didSet { setNeedsDisplay() } }
+    
+    weak var dataSource: GraphViewDataSource?
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -20,8 +29,37 @@ class GraphView: UIView
     }
     
     override func drawRect(rect: CGRect) {
-        let axesDrawer = AxesDrawer(color: UIColor.blackColor(), contentScaleFactor: contentScaleFactor)
+        let axesDrawer = AxesDrawer(contentScaleFactor: contentScaleFactor)
         axesDrawer.drawAxesInRect(bounds, origin: origin, pointsPerUnit: scale)
+        
+        // iterate over every pixel across the width of the view and draw a line to (or move to if the last
+        // datapoint was not valid) the next valid datapoint got from dataSource
+        
+        let path = UIBezierPath()
+        lineColor.set()
+        path.lineWidth = lineWidth
+        
+        var firstVal = true
+        var dataPoint = CGPoint()
+        for var i = 0; i <= Int(bounds.size.width * contentScaleFactor); i++ {
+            dataPoint.x = CGFloat(i) / contentScaleFactor
+            if let y = dataSource?.yForX((dataPoint.x - origin.x) / scale) {
+                if !y.isNormal && !y.isZero {
+                    firstVal = true
+                    continue
+                }
+                dataPoint.y = origin.y - y * scale
+                if firstVal {
+                    path.moveToPoint(dataPoint)
+                    firstVal = false
+                } else {
+                    path.addLineToPoint(dataPoint)
+                }
+            } else {
+                firstVal = true
+            }
+        }
+        path.stroke()
     }
     
     // --- Gestures handlers
